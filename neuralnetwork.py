@@ -1,6 +1,7 @@
 import numpy as np
 from keras.callbacks import EarlyStopping#set early stopping monitor so the model stops training when it won't improve anymore
 early_stopping_monitor = EarlyStopping(patience=3)
+from keras.optimizers import Adam
 from keras.models import Sequential
 from keras.layers import Dense
 from tokenizer import Tokenizer
@@ -42,7 +43,7 @@ class Network(object):
         Dense(len(self.inputs), activation='tanh', input_shape=((len(self.inputs),))),
         Dense(7, activation='softmax'),
         ])  
-        self._net.compile(optimizer = 'adam',loss='sparse_categorical_crossentropy',metrics =['accuracy'])
+        self._net.compile(optimizer = Adam(learning_rate=0.02),loss='sparse_categorical_crossentropy',metrics =['accuracy'])
 
 
     def adapt(self, vector):
@@ -58,7 +59,7 @@ class Network(object):
     def train(self):
         self.build_trainer()
         self.build_nn()
-        self._net.fit(pd.DataFrame(self._trainer[0]), pd.DataFrame(self._trainer[1]),validation_split=0.2, epochs=5, callbacks=[early_stopping_monitor])
+        self._net.fit(pd.DataFrame(self._trainer[0]), pd.DataFrame(self._trainer[1]),validation_split=0.2, epochs=30, callbacks=[early_stopping_monitor])
     
     def predict(self, sentence):
         if self._net is None or self._trainer is None:

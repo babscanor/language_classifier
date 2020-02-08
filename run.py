@@ -37,4 +37,4 @@ while True:
     sentence = input("Tapez une phrase: (stop pour arreter)")
     if sentence=="stop":
         break
-    print(matthew_verses.predict(sentence))
+    print(matthew_verses.predict(sentence), "this is the second version")
